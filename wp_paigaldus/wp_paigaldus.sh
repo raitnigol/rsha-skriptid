@@ -27,9 +27,6 @@ if [ ! -d $apache_wp_folder ]; then
 			wget https://wordpress.org/latest.tar.gz
 			tar xzvf latest.tar.gz
 			cp $wp_folder/wp-config-sample.php $wp_folder/wp-config.php
-			cp -r $wp_folder /var/www/html
-			echo "Wordpressi arhiiv on alla laetud."
-			echo "$wp_folder liigutatud asukohta /var/www/html/wordpress"
 		fi
 	else
 		#wordpressi kaust on olemas asukohas $currentdir/wordpress
@@ -39,3 +36,32 @@ else
 	#wordpressi kaust juba asub /var/www/html kaustas
 	echo "wordpressi kaust juba eksisteerib asukohas /var/www/html."
 fi
+
+# muudame wp-config.php failis andmed umber
+wp_config=$wp_folder/wp-config.php
+db_array=('database_name_here' 'username_here' 'password_here')
+value_array=('wordpress' 'root' 'qwerty')
+
+for index in ${!db_array[*]}; do
+	sed -i "s/${db_array[$index]}/${value_array[$index]}/g" $wp_config
+done
+
+# teeme andmebaasi wordpress
+mysql <<EOF
+CREATE DATABASE wordpress;
+CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'qwerty';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+
+# liigutame wordpressi failid oigesse asukohta ja kustutame arhiivi
+rm $currentdir/latest.tar.gz
+echo "Wordpressi arhiiv eemaldatud."
+cp -r $wp_folder /var/www/html
+echo "$wp_folder kopeeritud asukohta /var/www/html"
+rm -rf $wp_folder
+echo "eemaldatud wordpressi kaust."
+
+
+
+
