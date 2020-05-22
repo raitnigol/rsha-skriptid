@@ -25,7 +25,7 @@ if [ ! -d $apache_wp_folder ]; then
 			echo "arhiivi latest.tar.gz juba eksisteerib"
 		else
 			wget https://wordpress.org/latest.tar.gz
-			tar xzvf latest.tar.gz
+			tar xzf latest.tar.gz
 			cp $wp_folder/wp-config-sample.php $wp_folder/wp-config.php
 		fi
 	else
@@ -40,7 +40,7 @@ fi
 # muudame wp-config.php failis andmed umber
 wp_config=$wp_folder/wp-config.php
 db_array=('database_name_here' 'username_here' 'password_here')
-value_array=('wordpress' 'root' 'qwerty')
+value_array=('wordpress' 'wordpressuser' 'qwerty')
 
 for index in ${!db_array[*]}; do
 	sed -i "s/${db_array[$index]}/${value_array[$index]}/g" $wp_config
