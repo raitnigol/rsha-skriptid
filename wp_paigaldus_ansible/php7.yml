@@ -1,0 +1,14 @@
+---
+- hosts: webservers
+  tasks:
+    - name: installeerime php7.0
+      apt: name=php7.0 update_cache=yes state=latest
+    - name: installeerime libapache-mod-php7.0
+      apt: name=libapache2-mod-php7.0 update_cache=yes state=latest
+    - name: installeerime php7.0-mysql
+      apt: name=php7.0-mysql update_cache=yes state=latest
+
+    - name: Alglaadimine Apache2
+      service:
+        name: apache2
+        state: restarted

@@ -1,0 +1,5 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Installeerime phpmyadmini
+      apt: name=phpmyadmin update_cache=no state=latest
